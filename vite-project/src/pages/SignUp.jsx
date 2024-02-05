@@ -83,13 +83,13 @@ export default function SignUp() {
                   <span className='pl-3'>Loading...</span>
                 </div>
               ) : (
-                <span>SignUp</span>
+                <span>Sign Up</span>
               )}
             </Button>
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Have an account?</span>
-            <Link to='/sign-in' className='text-orange-500'>SignIn</Link>
+            <Link to='/sign-in' className='text-orange-500'>Sign In</Link>
           </div>
           {errorMessage && (
             <Alert className='mt-5' color='failure'>{errorMessage}</Alert>
