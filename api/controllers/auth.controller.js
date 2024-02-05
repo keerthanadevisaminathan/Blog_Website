@@ -27,6 +27,8 @@ export const signup = async (req, res, next) => {
 
 
 
+import jwt from 'jsonwebtoken';
+
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -47,7 +49,8 @@ export const signin = async (req, res, next) => {
 
     const token = jwt.sign(
       { id: validUser._id, isAdmin: validUser.isAdmin },
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET,
+      { expiresIn: '6h' } 
     );
 
     const { password: pass, ...rest } = validUser._doc;
@@ -56,6 +59,7 @@ export const signin = async (req, res, next) => {
       .status(200)
       .cookie('access_token', token, {
         httpOnly: true,
+        maxAge: 6 * 60 * 60 * 1000, 
       })
       .json(rest);
   } catch (error) {
