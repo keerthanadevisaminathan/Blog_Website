@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'; 
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import OAuth from '../OAuth';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -22,7 +23,7 @@ export default function SignIn() {
     }
     try {
       dispatch(signInStart());
-      const res = await fetch('api/auth/signin', {
+      const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -31,6 +32,7 @@ export default function SignIn() {
       if (res.ok) {
         dispatch(signInSuccess(data));
         navigate('/');
+        setFormData({}); // Clear form fields after successful submission
       } else {
         dispatch(signInFailure(data.message || 'Login failed.'));
       }
@@ -52,12 +54,12 @@ export default function SignIn() {
         </div>
         {/* Right section */}
         <div className="flex-1">
-          <form className='flex flex-col gap-4' onSubmit={handleSubmit} autoComplete="off">
+          <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <div>
               <Label value='Email' />
               <TextInput
                 type='email'
-                defaultValue=''
+                value={formData.email || ''}
                 id='email'
                 onChange={handleChange}
                 required
@@ -67,7 +69,7 @@ export default function SignIn() {
               <Label value='Password' />
               <TextInput
                 type='password'
-                defaultValue=''
+                value={formData.password || ''}
                 id='password'
                 onChange={handleChange}
                 required
@@ -83,6 +85,7 @@ export default function SignIn() {
                 <span>Sign In</span>
               )}
             </Button>
+            <OAuth/>
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Don't have an account?</span>
